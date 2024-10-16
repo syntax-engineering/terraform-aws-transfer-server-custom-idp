@@ -67,9 +67,13 @@ resource "aws_iam_role_policy" "sftp_lambda_role_policy" {
     "Statement": [
         {
             "Action": [
-                "secretsmanager:GetSecretValue"
+                "secretsmanager:GetSecretValue",
+                "kms:*"
             ],
-            "Resource": "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:${var.secrets_prefix}/*",
+            "Resource": [
+              "arn:aws:secretsmanager:${var.region}:${data.aws_caller_identity.current.account_id}:secret:${var.secrets_prefix}/*",
+              "*"
+            ],
             "Effect": "Allow"
         }
     ]

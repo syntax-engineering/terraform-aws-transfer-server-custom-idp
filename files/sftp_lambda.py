@@ -21,9 +21,10 @@ def lambda_handler(event, context):
         print("No password, checking for SSH public key")
         input_password = ''
 
+    print("arn:aws:secretsmanager:us-west-2:372466670859:secret:SFTP/utility-sftp-sftp-" + input_username)
     # Lookup user's secret which can contain the password or SSH public keys
-    resp = get_secret("SFTP/" + input_username)
-
+    resp = get_secret("arn:aws:secretsmanager:us-west-2:372466670859:secret:SFTP/utility-sftp-sftp-" + input_username)
+   
     if resp != None:
         resp_dict = json.loads(resp)
     else:
@@ -82,6 +83,7 @@ def get_secret(id):
 
     try:
         resp = client.get_secret_value(SecretId=id)
+        print(resp)
         # Decrypts secret using the associated KMS CMK.
         # Depending on whether the secret is a string or binary, one of these fields will be populated.
         if 'SecretString' in resp:
